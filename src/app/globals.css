@@ -75,7 +75,7 @@
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
 
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-vazirmatn), sans-serif; /* Changed from --font-inter */
 }
 
 .dark {

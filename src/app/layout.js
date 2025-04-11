@@ -1,4 +1,4 @@
-import { inter } from "./fonts";
+import { vazirmatn } from "./fonts";
 import "./globals.css";
 
 export const metadata = {
@@ -9,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${vazirmatn.className} antialiased`}>{children}</body>
     </html>
   );
 }
