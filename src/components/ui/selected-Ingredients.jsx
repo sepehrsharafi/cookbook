@@ -1,21 +1,33 @@
+"use client";
+
 import IngredientItem from "./ingredients";
+import { useIngredientContext } from "../../store/ingredient-context";
 
 export default function SelectedIngredients() {
+  const { ingredients, removeIngredient } = useIngredientContext();
+
+  const toDelete = (item) => {
+    removeIngredient(item);
+  };
+
   return (
     <section className="w-full px-5">
-      <h1 className="font-[550] text-xl mr-3 text-right mb-4">
-        مواد اولیه شما
-      </h1>
+      <div className="flex flex-row items-baseline gap-2">
+        <h1 className="font-[550] text-xl mr-3 text-right mb-4">
+          مواد اولیه شما
+        </h1>
+        <h2 className="font-[450] text-md  text-right text-slate-600 mb-4">
+          برای پاک کردن ضربه بزنید
+        </h2>
+      </div>
       <div className="bg-white border-[1px] border-[#CBD5E1] p-3 rounded-xl flex flex-wrap gap-2 text-right">
-        <IngredientItem title={"پیاز"} />
-        <IngredientItem title={"فلفل"} />
-        <IngredientItem title={"نان"} />
-        <IngredientItem title={"زرد چوبه"} />
-        <IngredientItem title={"سیر"} />
-        <IngredientItem title={"نمک"} />
-        <IngredientItem title={"برنج"} />
-        <IngredientItem title={"گوشت"} />
-        <IngredientItem title={"روغن زیتون"} />
+        {ingredients.length === 0 ? (
+          <span className="text-slate-400">هیچ ماده‌ای انتخاب نشده است</span>
+        ) : (
+          ingredients.map((item, idx) => (
+            <IngredientItem key={idx} title={item} toDelete={toDelete} />
+          ))
+        )}
       </div>
     </section>
   );

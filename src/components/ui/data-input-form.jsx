@@ -1,11 +1,26 @@
+"use client";
+
 import { Button } from "./button";
 import { Input } from "./input";
+import { useRef } from "react";
+import { useIngredientContext } from "../../store/ingredient-context";
 
 export default function DataInputForm() {
+  const ingredient = useRef(null);
+  const { addIngredient } = useIngredientContext();
+
+  const onsubmit = () => {
+    const value = ingredient.current?.value;
+    addIngredient(value);
+    if (ingredient.current) {
+      ingredient.current.value = "";
+    }
+  };
+
   return (
     <section className="flex flex-row w-full gap-2 mt-24 my-10 px-5">
-      <Input className="w-full" />
-      <Button className="h-12 w-12 active:bg-slate-700">
+      <Input ref={ingredient} className="w-full" />
+      <Button onClick={onsubmit} className="h-12 w-12 active:bg-slate-700">
         <svg
           height="200px"
           width="200px"
