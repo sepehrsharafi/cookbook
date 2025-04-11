@@ -4,7 +4,7 @@ import Suggestion from "@/components/ui/suggestion";
 export default async function Page() {
   return (
     <>
-      <Header placeholder="برگشت به صفحه اصلی" />
+      <Header placeholder="برگشت به صفحه اصلی" route={"menu"} />
       <main className="flex flex-col gap-6 mb-5">
         <Suggestion
           id={1}

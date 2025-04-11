@@ -9,16 +9,17 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="text-center">
+    <main className="container text-center mx-auto">
       {/* <HeroSection /> */}
-      <DataInputForm />
 
+      <DataInputForm />
       <SelectedIngredients />
-      <div className="px-5 pb-5 fixed w-full bottom-0">
+
+      <div className="fixed bottom-0 left-0 w-full right-0 px-5 md:px-20 py-5">
         <Link href={`/menu`}>
-          <button className="bg-slate-900 active:bg-slate-700 text-primary-foreground shadow-xs hover:bg-sky-700 text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-[450]">
+          <Button className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] active:bg-slate-800">
             ببین چه غذایی میتونی بپزی!
-          </button>
+          </Button>
         </Link>
       </div>
     </main>

@@ -16,7 +16,7 @@ export default function SelectedIngredients() {
         <h1 className="font-[550] text-xl mr-3 text-right mb-4">
           مواد اولیه شما
         </h1>
-        <h2 className="font-[450] text-md  text-right text-slate-600 mb-4">
+        <h2 className="font-[450] text-md text-right text-red-600 mb-4">
           برای پاک کردن ضربه بزنید
         </h2>
       </div>

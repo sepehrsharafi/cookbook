@@ -1,7 +1,20 @@
-export default function Header({ placeholder }) {
+"use client";
+
+import { usePathname, redirect } from "next/navigation";
+
+export default function Header({ placeholder, route }) {
+  const pathName = usePathname();
+
+  const goToThePreviousPage = () => {
+    redirect(pathName.replace(route, ``));
+  };
+
   return (
     <header className="flex flex-row items-center h-[70px] border-b-[1px] border-[#E2E8F0] px-5 gap-[10px]">
-      <div className="p-2 rounded-[6px] border-[2px] border-[#E2E8F0]">
+      <button
+        onClick={goToThePreviousPage}
+        className="p-2 rounded-[6px] border-[2px] border-[#E2E8F0]"
+      >
         <svg
           width="24"
           height="24"
@@ -24,7 +37,7 @@ export default function Header({ placeholder }) {
             strokeLinejoin="round"
           />
         </svg>
-      </div>
+      </button>
       <span className="text-xl font-[450]">{placeholder}</span>
     </header>
   );

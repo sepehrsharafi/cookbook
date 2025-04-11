@@ -82,7 +82,7 @@ export default function Suggestion({
         </p>
       </section>
       <div className="w-full px-5">
-        <Link href={`/food`}>
+        <Link href={`menu/food`}>
           <button className="bg-slate-900 active:bg-slate-700 text-primary-foreground shadow-xs hover:bg-sky-700 text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-[450]">
             کمکم کن بپزمش
           </button>
