@@ -5,7 +5,7 @@ export default function DataInputForm() {
   return (
     <section className="flex flex-row w-full gap-2 mt-24 my-10 px-5">
       <Input className="w-full" />
-      <Button className="h-11 w-11">
+      <Button className="h-12 w-12 active:bg-slate-700">
         <svg
           height="200px"
           width="200px"
