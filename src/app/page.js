@@ -14,9 +14,9 @@ export default function Home() {
 
       <SelectedIngredients />
       <div className="px-5 pb-5 fixed w-full bottom-0">
-        <Button className="text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-medium">
+        <button className="bg-slate-900 text-primary-foreground shadow-xs hover:bg-sky-700 text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-medium">
           ببین چه غذایی میتونی بپزی!
-        </Button>
+        </button>
       </div>
     </main>
   );
