@@ -8,7 +8,7 @@ function Input({ className, type, ...props }) {
       type={type}
       data-slot="input"
       placeholder="چه مواد اماده ای دردسترس داری؟"
-      className="block w-full h-12 text-[19px] font-normal border-[1px] border-gray-300 bg-gray-50/50 p-2 rounded-[8px]"
+      className="block w-full h-12 text-[19px] font-normal border-[1px] border-gray-300 bg-gray-50/50 p-2 rounded-[8px] placeholder:text-slate-400"
       {...props}
     />
   );
