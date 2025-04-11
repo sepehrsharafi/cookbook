@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html style={{ direction: "rtl" }} lang="en">
       <body className={`${vazirmatn.className} antialiased`}>
         <IngredientProvider>{children}</IngredientProvider>
       </body>
