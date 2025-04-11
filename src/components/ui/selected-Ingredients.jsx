@@ -23,7 +23,7 @@ export default function SelectedIngredients() {
       <div className="bg-white border-[1px] border-[#CBD5E1] p-3 rounded-xl flex flex-wrap gap-2 text-right">
         {ingredients.length === 0 ? (
           <div className="h-[38px] flex flex-row items-center">
-            <span className="text-slate-400 text-lg">
+            <span className="text-slate-400 font-normal text-lg">
               هیچ ماده‌ای انتخاب نشده است
             </span>
           </div>
