@@ -1,8 +1,15 @@
+"use client";
+
 import Table from "@/components/ui/data-table";
 import Header from "@/components/ui/header";
 import Image from "next/image";
 import { Suspense } from "react";
 import Loading from "./loading";
+import dynamic from "next/dynamic";
+
+const AIFoodRecipe = dynamic(() => import("@/components/ui/ai-food-recipe"), {
+  ssr: false,
+});
 
 export default function Page() {
   const foodData = [
@@ -16,7 +23,7 @@ export default function Page() {
     { item: "فلفل", quantity: "به مقدار لازم" },
   ];
 
-  async function Content() {
+  function Content() {
     return (
       <>
         <Image
@@ -152,6 +159,9 @@ export default function Page() {
         <section className="mx-5 my-7">
           <p className="text-[22px] font-medium">نوش جان! 🌿</p>
         </section>
+
+        {/* AI Recipe Section */}
+        <AIFoodRecipe />
       </>
     );
   }
