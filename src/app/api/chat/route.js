@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const userMessage =
-      "give me suggestions on how to make three differant kinds of pizza";
+      "give me recepie on how to make three differant kinds of bread";
 
     if (!userMessage) {
       return NextResponse.json(
@@ -25,16 +25,20 @@ export async function POST(request) {
     const systemPrompt = `You are a cooking recipe API that provides recipes in JSON format.
 
 ## CRITICAL INSTRUCTIONS:
-1. Your response must be raw, machine-readable JSON with NO ESCAPE CHARACTERS.
-2. This JSON will be directly parsed by code - DO NOT include newline characters (\n) or any escape slashes.
-3. Put all recipe text on single lines without line breaks.
-4. DO NOT wrap your response in {"response": "..."} - just provide the direct recipe JSON.
-5. Your output should be exactly like this sample (but with Farsi text):
+1. Your response MUST be ONLY raw, machine-readable JSON objects.
+2. DO NOT include ANY text before or after the JSON objects.
+3. DO NOT use markdown formatting like \`\`\`json ... \`\`\`.
+4. DO NOT use escape characters like \\n or \\\".
+5. Put all recipe text strings on single lines without line breaks inside the JSON.
+6. If providing multiple recipes, separate the JSON objects ONLY with a double newline character (\n\n). NO other text or characters between them.
+7. Your output MUST be in FARSI.
+8. Follow this exact structure for each recipe JSON object:
 
 {
   "title": "Recipe name",
-  "shortDescription": "Short description all on one line",
+  "shortDescription": "Short description all on two lines",
   "longDescription": "Longer description all on one line without any line breaks",
+  "duration": "one hour and thirty minutes",
   "ingredients": [
     {"item": "Ingredient 1", "quantity": "Amount 1"},
     {"item": "Ingredient 2", "quantity": "Amount 2"}
@@ -55,7 +59,7 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "deepseek-ai/DeepSeek-V3-0324", // Or your preferred model
+        model: "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8", // Or your preferred model
         messages: [
           {
             role: "system",
@@ -86,26 +90,62 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
 
     const data = await response.json();
 
-    console.log(data.choices[0].message);
+    // console.log(data.choices[0].message);
 
-    // Parse and log the destructured JSON content
-    let parsedContent = null;
+    // console.log("Chutes AI API raw response:", data);
+
+    // Parse the concatenated JSON string into an array of objects
+    const rawContent = data.choices[0].message.content;
+    // console.log("Raw content from AI:", rawContent); // Keep for debugging if needed
+
+    let recipes = [];
     try {
-      parsedContent = JSON.parse(data.choices[0].message.content);
-      console.log("Destructured parsed content:", parsedContent);
-    } catch (e) {
-      console.error(
-        "Failed to parse message.content as JSON",
-        e,
-        data.choices[0].message.content
+      // Split by the intended separator for full recipe objects
+      const potentialRecipeStrings = rawContent.trim().split("\n\n");
+
+      recipes = potentialRecipeStrings
+        .map((jsonString) => {
+          const trimmedString = jsonString.trim();
+          // Ensure the string looks like a JSON object before trying to parse
+          if (trimmedString.startsWith("{") && trimmedString.endsWith("}")) {
+            try {
+              // Attempt to parse the likely recipe object string
+              return JSON.parse(trimmedString);
+            } catch (parseError) {
+              console.error(
+                "Error parsing recipe JSON string:",
+                parseError.message
+              );
+              console.error("Problematic string:", trimmedString); // Log the string that failed
+              return null;
+            }
+          } else if (trimmedString.length > 0) {
+            // Log if a non-empty string fragment didn't look like a JSON object
+            console.warn("Skipping non-object string fragment:", trimmedString);
+          }
+          return null; // Return null for non-objects or strings that failed checks
+        })
+        .filter((recipe) => recipe !== null); // Filter out nulls
+
+      if (recipes.length === 0 && rawContent.trim().length > 0) {
+        console.warn(
+          "AI response received, but failed to parse any valid recipes from:",
+          rawContent
+        );
+      }
+
+      console.log(recipes);
+      // console.log("Successfully parsed recipes:", recipes);
+      return NextResponse.json(recipes);
+    } catch (processError) {
+      // Catch errors during split or other processing steps
+      console.error("Error processing Chutes AI response:", processError);
+      console.error("Raw content was:", rawContent);
+      return NextResponse.json(
+        { error: "Failed to process recipe data from AI response" },
+        { status: 500 }
       );
     }
-
-    // Log the raw response as received from Chutes AI API
-    console.log("Chutes AI API raw response:", data);
-
-    // Return both the raw response and the parsed content
-    return NextResponse.json({ ...data, parsedContent });
   } catch (error) {
     console.error("Error in /api/chat:", error);
     return NextResponse.json(

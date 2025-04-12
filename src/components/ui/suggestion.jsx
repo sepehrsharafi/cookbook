@@ -42,7 +42,7 @@ export default function Suggestion({
         width={1000}
         height={1000}
         alt="image"
-        className="h-64 w-full object-cover"
+        className="h-72 w-full object-cover"
       />
       <section className="flex flex-col items-start gap-[10px] w-full px-5">
         <h1 className="text-[23px] font-medium">{title}</h1>
