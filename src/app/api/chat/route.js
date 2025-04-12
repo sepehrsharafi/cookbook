@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const userMessage = body.message;
+    const userMessage =
+      "give me suggestions on how to make three differant kinds of pizza";
 
     if (!userMessage) {
       return NextResponse.json(
@@ -55,7 +55,7 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8", // Or your preferred model
+        model: "deepseek-ai/DeepSeek-V3-0324", // Or your preferred model
         messages: [
           {
             role: "system",
@@ -86,27 +86,26 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
 
     const data = await response.json();
 
-    // const responseStr = JSON.parse(data).response;
-    // const recipeData = JSON.parse(responseStr);
+    console.log(data.choices[0].message);
 
-    console.log(data);
-    console.log(data.choices?.[0]?.message?.content);
+    // Parse and log the destructured JSON content
+    let parsedContent = null;
+    try {
+      parsedContent = JSON.parse(data.choices[0].message.content);
+      console.log("Destructured parsed content:", parsedContent);
+    } catch (e) {
+      console.error(
+        "Failed to parse message.content as JSON",
+        e,
+        data.choices[0].message.content
+      );
+    }
 
-    // Parse the recipe JSON string from the API response
-    const recipe = JSON.parse(data.choices?.[0]?.message?.content);
+    // Log the raw response as received from Chutes AI API
+    console.log("Chutes AI API raw response:", data);
 
-    // Now you can access the clean data
-    console.log(recipe.title); // "فلافل خانگی"
-    console.log(recipe.ingredients[0].item); // "نخود خیس خورده"
-
-    // console.log('Chutes AI Response:', data); // Optional: log the response server-side
-
-    // Return the relevant part of the AI's response
-    // Adjust based on the actual structure of the Chutes AI response object
-    const aiResponseContent =
-      data.choices?.[0]?.message?.content || "No response content found.";
-
-    return NextResponse.json({ response: aiResponseContent });
+    // Return both the raw response and the parsed content
+    return NextResponse.json({ ...data, parsedContent });
   } catch (error) {
     console.error("Error in /api/chat:", error);
     return NextResponse.json(

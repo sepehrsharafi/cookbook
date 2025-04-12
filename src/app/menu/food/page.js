@@ -5,23 +5,10 @@ import Header from "@/components/ui/header";
 import Image from "next/image";
 import { Suspense } from "react";
 import Loading from "./loading";
-import dynamic from "next/dynamic";
-
-const AIFoodRecipe = dynamic(() => import("@/components/ui/ai-food-recipe"), {
-  ssr: false,
-});
+import { useIngredientContext } from "@/store/ingredient-context";
 
 export default function Page() {
-  const foodData = [
-    { item: "گوشت سردست", quantity: "نیم کیلو" },
-    { item: "پیاز", quantity: "1 عدد بزرگ" },
-    { item: "روغن", quantity: "250 گرم" },
-    { item: "لوبیا قرمز", quantity: "نصفه پیمانه" },
-    { item: "سبزی خورشت", quantity: "1 کیلوگرم" },
-    { item: "زردچوبه", quantity: "به مقدار لازم" },
-    { item: "نمک", quantity: "به مقدار لازم" },
-    { item: "فلفل", quantity: "به مقدار لازم" },
-  ];
+  const { ingredients } = useIngredientContext();
 
   function Content() {
     return (
@@ -101,7 +88,9 @@ export default function Page() {
 
         <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
-        <Table source={foodData} />
+        <Table
+          source={ingredients && ingredients.length > 0 ? ingredients : []}
+        />
 
         <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
@@ -159,9 +148,6 @@ export default function Page() {
         <section className="mx-5 my-7">
           <p className="text-[22px] font-medium">نوش جان! 🌿</p>
         </section>
-
-        {/* AI Recipe Section */}
-        <AIFoodRecipe />
       </>
     );
   }

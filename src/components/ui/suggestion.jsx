@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useIngredientContext } from "@/store/ingredient-context";
 
 export default function Suggestion({
   id,
@@ -8,6 +10,31 @@ export default function Suggestion({
   duration,
   description,
 }) {
+  const router = useRouter();
+  const { setIngredients } = useIngredientContext();
+
+  const handleClick = async () => {
+    try {
+      // Call the API (adjust endpoint and payload as needed)
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error("API call failed");
+      const data = await res.json();
+
+      // Assume the API returns an array of ingredients
+      setIngredients(data.ingredients || []);
+
+      // Navigate to the food page
+      router.push("/menu/food");
+    } catch (error) {
+      // Optionally handle error (e.g., show a toast)
+      console.error(error);
+    }
+  };
+
   return (
     <article className="flex flex-col items-center gap-5">
       <Image
@@ -20,9 +47,7 @@ export default function Suggestion({
       <section className="flex flex-col items-start gap-[10px] w-full px-5">
         <h1 className="text-[23px] font-medium">{title}</h1>
         <div className="flex flex-row-reverse gap-2 items-center">
-          <span className="text-[17px] font-[450] h-[20px]">
-            2 ساعت و 30 دقیقه
-          </span>
+          <span className="text-[17px] font-[450] h-[20px]">{duration}</span>
           <svg
             width="26"
             height="26"
@@ -74,19 +99,15 @@ export default function Suggestion({
             />
           </svg>
         </div>
-        <p className="text-[18px] font-normal line-clamp-5">
-          قورمه سبزی یکی از غذاهای سنتی و محبوب در فرهنگ غذایی ایران است. این
-          غذا با ترکیبی از سبزیجات تازه و معمولاً گوشت قرمز، یا گوشت مرغ تهیه
-          می‌شود. سبزیجات معمولاً شامل تره، جعفری، گشنیز، شنبلیله و نعناع است که
-          به صورت خرد
-        </p>
+        <p className="text-[18px] font-normal line-clamp-5">{description}</p>
       </section>
       <div className="w-full px-5">
-        <Link href={`menu/food`}>
-          <button className="bg-slate-900 active:bg-slate-700 text-primary-foreground shadow-xs hover:bg-sky-700 text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-[450]">
-            کمکم کن بپزمش
-          </button>
-        </Link>
+        <button
+          className="bg-slate-900 active:bg-slate-700 text-primary-foreground shadow-xs hover:bg-sky-700 text-lg xl:text-2xl 2xl:text-2xl h-[56px] w-full rounded-[10px] font-[450]"
+          onClick={handleClick}
+        >
+          کمکم کن بپزمش
+        </button>
       </div>
     </article>
   );

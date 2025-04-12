@@ -8,6 +8,7 @@ const IngredientContext = createContext();
 // Provider component
 export function IngredientProvider({ children }) {
   const [ingredients, setIngredients] = useState([]);
+  const [recipes, setRecipes] = useState(null);
 
   // Add a new ingredient to the array
   const addIngredient = (ingredient) => {
@@ -21,9 +22,17 @@ export function IngredientProvider({ children }) {
     setIngredients((prev) => prev.filter((item) => item !== ingredient));
   };
 
+  console.log(recipes);
   return (
     <IngredientContext.Provider
-      value={{ ingredients, addIngredient, removeIngredient }}
+      value={{
+        ingredients,
+        addIngredient,
+        removeIngredient,
+        setIngredients,
+        recipes,
+        setRecipes,
+      }}
     >
       {children}
     </IngredientContext.Provider>
