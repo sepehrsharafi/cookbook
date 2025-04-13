@@ -65,7 +65,7 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8", // Or your preferred model
+        model: "deepseek-ai/DeepSeek-V3-0324", // Or your preferred model
         messages: [
           {
             role: "system",
