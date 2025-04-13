@@ -6,31 +6,71 @@ import Image from "next/image";
 import { Suspense } from "react";
 import Loading from "./loading";
 import { useIngredientContext } from "@/store/ingredient-context";
+import { useRouter } from "next/navigation"; // Import useRouter
+import { useEffect } from "react"; // Import useEffect
 
 export default function Page() {
-  const foodData = [
-    { item: "one", quantity: "one q" },
-    { item: "two", quantity: "two q" },
-    { item: "three", quantity: "three q" },
-    { item: "four", quantity: "four q" },
-    { item: "fove", quantity: "five q" },
-  ];
+  const { selectedRecipe } = useIngredientContext();
+  const router = useRouter();
 
-  function Content() {
-    return (
-      <>
-        <Image
-          className="w-full object-cover h-80"
-          src="/ghorme-sabzi.jpg"
-          width={1000}
-          height={1000}
-          alt="image"
-        />
-        <section className="mx-5 my-4 gap-3 flex flex-col items-start">
-          <h1 className="text-[23px] font-medium h-[30px]">خورش قورمه سبزی</h1>
+  // Redirect if no recipe is selected (e.g., direct navigation)
+  useEffect(() => {
+    if (!selectedRecipe) {
+      // Redirect back to the menu or home page after a short delay
+      // to allow context potentially load if it was a fast refresh issue.
+      const timer = setTimeout(() => {
+        if (!selectedRecipe) {
+          // Double check after delay
+          router.push("/"); // Or '/menu'
+        }
+      }, 100); // Short delay
+      return () => clearTimeout(timer);
+    }
+  }, [selectedRecipe, router]);
+
+  // Show loading if recipe is not yet available or redirecting
+  if (!selectedRecipe) {
+    return <Loading />;
+  }
+
+  // Pass the selected recipe to the Content component
+  return (
+    <>
+      <Header placeholder={"برگشت به منو"} route={"food"} />
+      <Suspense fallback={<Loading />}>
+        <Content recipe={selectedRecipe} />
+      </Suspense>
+    </>
+  );
+}
+
+// Content component now accepts the recipe as a prop
+function Content({ recipe }) {
+  // Assuming recipe structure: { imgURL, title, duration, description, ingredients, instructions }
+  // Use recipe.ingredients directly if it matches Table's expected format
+  // Otherwise, transform it here if needed. Assuming it matches for now.
+  const ingredientsForTable = recipe.ingredients || [];
+  const instructionsList = recipe.instructions || [];
+
+  return (
+    <>
+      <Image
+        className="w-full object-cover h-80"
+        src={recipe.imgURL || "/ghorme-sabzi.jpg"} // Use dynamic image, fallback if needed
+        width={1000}
+        height={1000}
+        alt={recipe.title || "Food image"} // Dynamic alt text
+      />
+      <section className="mx-5 my-4 gap-3 flex flex-col items-start">
+        <h1 className="text-[23px] font-medium h-auto min-h-[30px]">
+          {" "}
+          {/* Allow height to adjust */}
+          {recipe.title || "نام غذا"} {/* Dynamic title */}
+        </h1>
+        {recipe.duration && ( // Conditionally render duration
           <div className="flex flex-row-reverse gap-2 items-center">
             <span className="text-[17px] font-[450] h-[20px]">
-              2 ساعت و 30 دقیقه
+              {recipe.duration} {/* Dynamic duration */}
             </span>
             <svg
               width="26"
@@ -83,85 +123,47 @@ export default function Page() {
               />
             </svg>
           </div>
-          <p className="text-[18px] font-normal">
-            قورمه سبزی یکی از غذاهای سنتی و محبوب در فرهنگ غذایی ایران است. این
-            غذا با ترکیبی از سبزیجات تازه و معمولاً گوشت قرمز، یا گوشت مرغ تهیه
-            می‌شود. سبزیجات معمولاً شامل تره، جعفری، گشنیز، شنبلیله و نعناع است
-            که به صورت خرد شده و همراه با گوشت و ادویه‌ها در قورمه سبزی استفاده
-            می‌شوند.
-          </p>
-        </section>
+        )}
+        <p className="text-[18px] font-normal">
+          {recipe.description || "توضیحات غذا در اینجا قرار می‌گیرد."}{" "}
+          {/* Dynamic description */}
+        </p>
+      </section>
 
-        <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
+      <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
-        <Table source={foodData} />
+      {/* Pass dynamic ingredients to the Table */}
+      <Table source={ingredientsForTable} />
 
-        <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
+      <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
+      {/* Display dynamic instructions */}
+      {instructionsList.length > 0 && (
         <section>
           <h1 className="text-[19px] font-medium mx-5 mb-2">طرز تهیه:</h1>
           <div className="mx-5">
             <ol
               style={{ listStyle: "arabic-indic", listStylePosition: "inside" }}
-              className="text-lg font-normal list-decimal"
+              className="text-lg font-normal list-decimal space-y-2" // Added space-y-2 for better readability
               lang="fa"
             >
-              <li>نخودها را از شب قبل خیس کنید و بپزید تا نرم شوند.</li>
-              <li>
-                در قابلمه، پیاز را با روغن تفت دهید تا طلایی شود. سیر را اضافه و
-                کمی تفت دهید.
-              </li>
-              <li>
-                سبزی‌ها (جعفری، گشنیز، شوید) را اضافه و تفت دهید تا عطرشان بلند
-                شود.
-              </li>
-              <li>
-                نخود پخته، تخم گشنیز، پودر تخم گشنیز، پودر لیمو عمانی، نمک و
-                فلفل را اضافه کنید.
-              </li>
-              <li>
-                آب جوش به اندازه‌ای اضافه کنید که مواد را بپوشاند (حدود ۲-۳
-                پیمانه).
-              </li>
-              <li>
-                با حرارت ملایم بگذارید ۱-۱.۵ ساعت بپزد تا جا بیفتد. اگر آب کم
-                بود، اضافه کنید.
-              </li>
-              <li>
-                در آخر، برای غلظت می‌توانید کمی آرد نخودچی حل‌شده در آب سرد
-                اضافه کنید.
-              </li>
+              {instructionsList.map((step, index) => (
+                <li key={index}>{step}</li> // Render each instruction step
+              ))}
             </ol>
           </div>
         </section>
+      )}
 
-        <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
+      {/* Removed redundant sections like second "طرز تهیه" and "نوش جان" unless they are part of dynamic data */}
 
-        <section>
-          <h1 className="text-[19px] font-medium mx-5 mb-2">طرز تهیه:</h1>
-          <div className="mx-5">
-            <ul
-              style={{ listStylePosition: "inside" }}
-              className="text-lg font-normal list-disc"
-            >
-              <li>با برنج سفید، ترشی و ماست سرو کنید.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section className="mx-5 my-7">
-          <p className="text-[22px] font-medium">نوش جان! 🌿</p>
-        </section>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Header placeholder={"برگشت به منو"} route={"food"} />
-      <Suspense fallback={<Loading />}>
-        <Content />
-      </Suspense>
+      {/* Optional: Add a "نوش جان" section if desired */}
+      <section className="mx-5 my-7">
+        {/* <p className="text-[22px] font-medium">نوش جان! </p> */}
+        <p className="text-[22px] font-medium">
+          {recipe.enjoyMessage || "نوش جان!"}
+        </p>
+      </section>
     </>
   );
 }

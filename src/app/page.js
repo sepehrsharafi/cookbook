@@ -25,9 +25,13 @@ export default function Home() {
       const res = await axios.post("/api/chat", { ingredients });
       const data = res.data; // API now returns the array of recipes directly
 
-      // Store the fetched recipes array in context
+      // Add unique IDs and store the fetched recipes array in context
       if (Array.isArray(data)) {
-        setRecipes(data);
+        const recipesWithIds = data.map((recipe, index) => ({
+          ...recipe,
+          id: `recipe-${index}`, // Add a unique ID based on index
+        }));
+        setRecipes(recipesWithIds);
         // Navigate to the menu page only after successful fetch and data set
         router.push("/menu");
       } else {

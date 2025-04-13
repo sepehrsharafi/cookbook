@@ -40,6 +40,8 @@ export async function POST(request) {
 7. Your output MUST be in FARSI.
 8. Follow this exact structure for each recipe JSON object:
 9. VERY IMPORTANT: THE INSTRUCTIONS NEED TO BE CLEAR AND DETAILED AND STEP BY STEP. MAKE SURE TO FOLLOW THIS RULE.
+10. MAKE THE INGREDIENTS LIST MORE DETAILED. FOR EXAMPLE IF YOU WANT TO COOK EGGS DONT JUST SAY EGGS IN THE INGRIDIENTS LIST BECAUSE TO COOK EGGS YOU ALSO NEED OIL. SO SAYY ALL OF THE THINGS NEEDED TO COOK THAT FOOD.
+
 {
   "title": "Recipe name",
   "shortDescription": "IMPORTANT: Short description need to be in three lines long but without any line breaks",
@@ -53,7 +55,7 @@ export async function POST(request) {
     "Instruction 1 on a single line",
     "Instruction 2 on a single line"
   ],
-  "enjoyMessage": "Enjoy message on one line"
+  "enjoyMessage": "Enjoy message on one line   And a relevant emoji in the end (THE EMOJIE NEEDS TO BE COLORFULL, YOU CAN ADD UP TO THREE EMOJIES)"
 }
 
 REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatting for human readability with newlines will break the parser.`;
@@ -65,7 +67,7 @@ REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatt
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "deepseek-ai/DeepSeek-V3-0324", // Or your preferred model
+        model: "chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8", // Or your preferred model
         messages: [
           {
             role: "system",
