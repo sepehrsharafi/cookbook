@@ -8,7 +8,13 @@ import Loading from "./loading";
 import { useIngredientContext } from "@/store/ingredient-context";
 
 export default function Page() {
-  const { ingredients } = useIngredientContext();
+  const foodData = [
+    { item: "one", quantity: "one q" },
+    { item: "two", quantity: "two q" },
+    { item: "three", quantity: "three q" },
+    { item: "four", quantity: "four q" },
+    { item: "fove", quantity: "five q" },
+  ];
 
   function Content() {
     return (
@@ -88,9 +94,7 @@ export default function Page() {
 
         <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
-        <Table
-          source={ingredients && ingredients.length > 0 ? ingredients : []}
-        />
+        <Table source={foodData} />
 
         <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 

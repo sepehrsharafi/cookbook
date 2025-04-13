@@ -8,7 +8,8 @@ const IngredientContext = createContext();
 // Provider component
 export function IngredientProvider({ children }) {
   const [ingredients, setIngredients] = useState([]);
-  const [recipes, setRecipes] = useState(null);
+  const [recipes, setRecipes] = useState(null); // Holds the array of fetched recipes
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // Holds the recipe clicked by the user
 
   // Add a new ingredient to the array
   const addIngredient = (ingredient) => {
@@ -22,7 +23,7 @@ export function IngredientProvider({ children }) {
     setIngredients((prev) => prev.filter((item) => item !== ingredient));
   };
 
-  console.log(recipes);
+  // console.log(recipes); // Keep commented or remove if not needed
   return (
     <IngredientContext.Provider
       value={{
@@ -30,8 +31,10 @@ export function IngredientProvider({ children }) {
         addIngredient,
         removeIngredient,
         setIngredients,
-        recipes,
+        recipes, // The list of all suggestions
         setRecipes,
+        selectedRecipe, // The specific recipe the user clicked on
+        setSelectedRecipe,
       }}
     >
       {children}

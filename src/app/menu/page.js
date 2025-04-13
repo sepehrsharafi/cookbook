@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import Header from "@/components/ui/header";
 import Suggestion from "@/components/ui/suggestion";
 import { useIngredientContext } from "@/store/ingredient-context";
@@ -17,19 +17,22 @@ export default function Page() {
     content = <Loading />;
   } else if (Array.isArray(recipes) && recipes.length > 0) {
     // recipes is a non-empty array, display suggestions
-    content = recipes.map((suggestion, idx) => (
-      <>
-        <Suggestion
-          key={suggestion.id || idx}
-          id={suggestion.id || idx + 1}
-          imgURL={imageUrls[idx % imageUrls.length]}
-          title={suggestion.title}
-          duration={suggestion.duration || ""}
-          description={suggestion.shortDescription || ""}
-        />{" "}
-        <hr className="bg-[#E2E8F0] h-[2px] mx-8 rounded-full" />
-      </>
-    ));
+    content = recipes.map((suggestion, idx) => {
+      // Assign the correct image URL here before passing the object
+      const suggestionWithImage = {
+        ...suggestion,
+        imgURL: imageUrls[idx % imageUrls.length], // Add the imgURL to the object
+      };
+      return (
+        // Use React Fragment shorthand for the key on the outer element
+        <React.Fragment key={suggestion.id || idx}>
+          <Suggestion
+            suggestion={suggestionWithImage} // Pass the whole object with the added imgURL
+          />
+          <hr className="bg-[#E2E8F0] h-[2px] mx-8 rounded-full" />
+        </React.Fragment>
+      );
+    });
   } else {
     content = (
       <p className="text-center text-gray-500 mt-10">

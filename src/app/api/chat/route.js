@@ -2,15 +2,21 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    const userMessage =
-      "give me recepie on how to make three differant kinds of bread";
+    // Read ingredients from the request body
+    const { ingredients } = await request.json();
 
-    if (!userMessage) {
+    // Validate ingredients
+    if (!Array.isArray(ingredients) || ingredients.length === 0) {
       return NextResponse.json(
-        { error: "Message is required" },
+        { error: "Ingredients list is required and cannot be empty" },
         { status: 400 }
       );
     }
+
+    // Construct the user message for the AI based on ingredients
+    const userMessage = `Suggest three different recipes I can make using these ingredients: ${ingredients.join(
+      ", "
+    )}.`;
 
     const apiKey = process.env.CHUTES_API_TOKEN;
 
@@ -22,10 +28,10 @@ export async function POST(request) {
       );
     }
 
-    const systemPrompt = `You are a cooking recipe API that provides recipes in JSON format.
+    const systemPrompt = `You are a cooking recipe API. Your goal is to provide recipe suggestions based *only* on the ingredients provided by the user. Provide exactly three distinct recipe suggestions in JSON format.
 
 ## CRITICAL INSTRUCTIONS:
-1. Your response MUST be ONLY raw, machine-readable JSON objects.
+1. Your response MUST be ONLY raw, machine-readable JSON objects, based *strictly* on the provided ingredients.
 2. DO NOT include ANY text before or after the JSON objects.
 3. DO NOT use markdown formatting like \`\`\`json ... \`\`\`.
 4. DO NOT use escape characters like \\n or \\\".
@@ -33,10 +39,10 @@ export async function POST(request) {
 6. If providing multiple recipes, separate the JSON objects ONLY with a double newline character (\n\n). NO other text or characters between them.
 7. Your output MUST be in FARSI.
 8. Follow this exact structure for each recipe JSON object:
-
+9. VERY IMPORTANT: THE INSTRUCTIONS NEED TO BE CLEAR AND DETAILED AND STEP BY STEP. MAKE SURE TO FOLLOW THIS RULE.
 {
   "title": "Recipe name",
-  "shortDescription": "Short description all on two lines",
+  "shortDescription": "IMPORTANT: Short description need to be in three lines long but without any line breaks",
   "longDescription": "Longer description all on one line without any line breaks",
   "duration": "one hour and thirty minutes",
   "ingredients": [

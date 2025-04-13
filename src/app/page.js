@@ -1,10 +1,7 @@
 "use client";
-import Image from "next/image";
-import Header from "../components/ui/header";
-import HeroSection from "../components/ui/hero-section";
+
 import DataInputForm from "../components/ui/data-input-form";
 import { Button } from "@/components/ui/button";
-import IngredientItem from "../components/ui/ingredients"; // Use default import
 import { useState } from "react"; // Import useState
 import SelectedIngredients from "@/components/ui/selected-Ingredients";
 import { useRouter } from "next/navigation";
@@ -20,7 +17,7 @@ export default function Home() {
   const handleClick = async () => {
     setIsLoading(true); // Start loading
     setError(null); // Reset error
-    setRecipes(null); // Clear previous recipes before fetching new ones
+    // REMOVED: setRecipes(null); - Don't clear recipes before fetch. Let context update handle it.
 
     try {
       // Call the internal API route to fetch the data using axios

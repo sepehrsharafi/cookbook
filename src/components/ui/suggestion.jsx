@@ -3,40 +3,27 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useIngredientContext } from "@/store/ingredient-context";
 
-export default function Suggestion({
-  id,
-  imgURL,
-  title,
-  duration,
-  description,
-}) {
+// Accept the full suggestion object as a prop
+export default function Suggestion({ suggestion }) {
   const router = useRouter();
-  const { setIngredients } = useIngredientContext();
+  // Get setSelectedRecipe from context
+  const { setSelectedRecipe } = useIngredientContext();
 
-  const handleClick = async () => {
-    try {
-      // Call the API (adjust endpoint and payload as needed)
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-      if (!res.ok) throw new Error("API call failed");
-      const data = await res.json();
+  // Destructure needed properties from the suggestion object for display
+  const { id, imgURL, title, duration, shortDescription } = suggestion;
 
-      // Assume the API returns an array of ingredients
-      setIngredients(data.ingredients || []);
-
-      // Navigate to the food page
-      router.push("/menu/food");
-    } catch (error) {
-      // Optionally handle error (e.g., show a toast)
-      console.error(error);
-    }
+  const handleClick = () => {
+    // No API call needed here
+    // Store the entire selected suggestion object in the context
+    setSelectedRecipe(suggestion);
+    // Navigate to the food page
+    router.push("/menu/food");
+    // No try/catch needed as there's no async operation prone to failure here
   };
 
   return (
     <article className="flex flex-col items-center gap-5">
+      {/* Use the destructured imgURL */}
       <Image
         src={imgURL}
         width={1000}
@@ -45,61 +32,68 @@ export default function Suggestion({
         className="h-72 w-full object-cover"
       />
       <section className="flex flex-col items-start gap-[10px] w-full px-5">
+        {/* Use the destructured title */}
         <h1 className="text-[23px] font-medium">{title}</h1>
-        <div className="flex flex-row-reverse gap-2 items-center">
-          <span className="text-[17px] font-[450] h-[20px]">{duration}</span>
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 26 26"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M13.0002 22.7501C17.7866 22.7501 21.6668 18.8699 21.6668 14.0834C21.6668 9.29695 17.7866 5.41675 13.0002 5.41675C8.21369 5.41675 4.3335 9.29695 4.3335 14.0834C4.3335 18.8699 8.21369 22.7501 13.0002 22.7501Z"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M13 9.75V14.0833L15.1667 16.25"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M5.4165 3.25L2.1665 6.5"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M23.8335 6.5L20.5835 3.25"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M6.50016 20.5833L4.3335 22.7499"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M19.5 20.5833L21.6667 22.7499"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <p className="text-[18px] font-normal line-clamp-5">{description}</p>
+        {/* Conditionally render duration only if it exists */}
+        {duration && (
+          <div className="flex flex-row-reverse gap-2 items-center">
+            <span className="text-[17px] font-[450] h-[20px]">{duration}</span>
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 26 26"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.0002 22.7501C17.7866 22.7501 21.6668 18.8699 21.6668 14.0834C21.6668 9.29695 17.7866 5.41675 13.0002 5.41675C8.21369 5.41675 4.3335 9.29695 4.3335 14.0834C4.3335 18.8699 8.21369 22.7501 13.0002 22.7501Z"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M13 9.75V14.0833L15.1667 16.25"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M5.4165 3.25L2.1665 6.5"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M23.8335 6.5L20.5835 3.25"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M6.50016 20.5833L4.3335 22.7499"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M19.5 20.5833L21.6667 22.7499"
+                stroke="black"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
+        {/* Use the destructured shortDescription */}
+        <p className="text-[18px] font-normal line-clamp-5">
+          {shortDescription}
+        </p>
       </section>
       <div className="w-full px-5">
         <button
