@@ -7,6 +7,9 @@ import SelectedIngredients from "@/components/ui/selected-Ingredients";
 import { useRouter } from "next/navigation";
 import { useIngredientContext } from "@/store/ingredient-context";
 import axios from "axios";
+import { GlowEffect } from "@/components/ui/glow-effect";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -18,6 +21,8 @@ export default function Home() {
     setIsLoading(true); // Start loading
     setError(null); // Reset error
     // REMOVED: setRecipes(null); - Don't clear recipes before fetch. Let context update handle it.
+
+    router.push("/menu");
 
     try {
       // Call the internal API route to fetch the data using axios
@@ -33,7 +38,6 @@ export default function Home() {
         }));
         setRecipes(recipesWithIds);
         // Navigate to the menu page only after successful fetch and data set
-        router.push("/menu");
       } else {
         // Handle cases where API might not return an array as expected
         console.error("API did not return an array:", data);
@@ -56,19 +60,27 @@ export default function Home() {
       {/* <HeroSection /> */}
       <DataInputForm />
       <SelectedIngredients />
-      {error && <p className="text-red-500 mt-4">{error}</p>}{" "}
+      {error && <p className="text-red-500 mt-4">{error}</p>}
       {/* Display error message */}
       <div className="fixed bottom-0 left-0 w-full right-0 px-5 md:px-20 py-5">
-        <Button
-          className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] active:bg-slate-800 disabled:opacity-50"
-          onClick={handleClick}
-          disabled={isLoading} // Disable button while loading
-        >
-          {isLoading
-            ? "در حال یافتن دستور پخت..."
-            : "ببین چه غذایی میتونی بپزی!"}{" "}
-          {/* Show loading text */}
-        </Button>
+        <div className="relative">
+          <GlowEffect
+            colors={["#FF5733", "#33FF57", "#3357FF", "#F1C40F"]}
+            mode="breathe"
+            blur="soft"
+            duration={5}
+            scale={1.1}
+          />
+          <button
+            className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] relative inline-flex items-center justify-center gap-1  bg-slate-900 py-1.5 text-sm text-zinc-50  outline-1 outline-[#fff2f21f]"
+            onClick={handleClick}
+            disabled={isLoading} // Disable button while loading
+          >
+            {isLoading
+              ? "در حال یافتن دستور پخت..."
+              : "ببین چه غذایی میتونی بپزی!"}
+          </button>
+        </div>
       </div>
     </main>
   );

@@ -11,10 +11,10 @@ export default function Header({ placeholder, route }) {
 
   return (
     <>
-      <header className="fixed top-0 w-full bg-white/93 backdrop-blur-[2px] flex flex-row items-center h-[70px] border-b-[1px] border-[#E2E8F0] px-5 gap-[10px]">
+      <header className="fixed top-0 w-full bg-white/90 backdrop-blur-[4px] flex flex-row items-center h-[70px] border-b-[1px] border-[#E2E8F0] px-5 gap-[10px]">
         <button
           onClick={goToThePreviousPage}
-          className="p-2 rounded-[6px] border-[2px] border-[#E2E8F0]"
+          className="p-2 bg-white/90 rounded-[6px] border-[2px] border-[#E2E8F0]"
         >
           <svg
             width="24"
