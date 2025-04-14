@@ -1,15 +1,13 @@
 "use client";
 
 import DataInputForm from "../components/ui/data-input-form";
-import { Button } from "@/components/ui/button";
-import { useState } from "react"; // Import useState
+import { useState } from "react";
 import SelectedIngredients from "@/components/ui/selected-Ingredients";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useIngredientContext } from "@/store/ingredient-context";
 import axios from "axios";
 import { GlowEffect } from "@/components/ui/glow-effect";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 export default function Home() {
   const router = useRouter();
@@ -56,32 +54,45 @@ export default function Home() {
   };
 
   return (
-    <main className="container text-center mx-auto">
-      {/* <HeroSection /> */}
-      <DataInputForm />
-      <SelectedIngredients />
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-      {/* Display error message */}
-      <div className="fixed bottom-0 left-0 w-full right-0 px-5 md:px-20 py-5">
-        <div className="relative">
-          <GlowEffect
-            colors={["#FF5733", "#33FF57", "#3357FF", "#F1C40F"]}
-            mode="breathe"
-            blur="soft"
-            duration={5}
-            scale={1.1}
-          />
-          <button
-            className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] relative inline-flex items-center justify-center gap-1  bg-slate-900 py-1.5 text-sm text-zinc-50  outline-1 outline-[#fff2f21f]"
-            onClick={handleClick}
-            disabled={isLoading} // Disable button while loading
-          >
-            {isLoading
-              ? "در حال یافتن دستور پخت..."
-              : "ببین چه غذایی میتونی بپزی!"}
-          </button>
+    <main className="flex flex-col h-full">
+      <FlickeringGrid
+        className="z-0 absolute size-full"
+        squareSize={4}
+        gridGap={6}
+        color="#6666ff"
+        maxOpacity={0.25}
+        flickerChance={0.6}
+      />
+      <section className="container text-center z-10">
+        {/* <HeroSection /> */}
+        <div className="mt-20 flex flex-col gap-5 mx-5 p-4 bg-white rounded-2xl border-[1.5px] border-gray-300">
+          <DataInputForm />
+
+          <SelectedIngredients />
         </div>
-      </div>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {/* Display error message */}
+        <div className="fixed bottom-0 left-0 w-full right-0 px-5 md:px-20 py-5">
+          <div className="relative">
+            <GlowEffect
+              colors={["#FF5733", "#33FF57", "#3357FF", "#F1C40F"]}
+              mode="breathe"
+              blur="soft"
+              duration={5}
+              scale={1.1}
+            />
+            <button
+              className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] relative inline-flex items-center justify-center gap-1  bg-slate-900 py-1.5 text-sm text-zinc-50  outline-1 outline-[#fff2f21f]"
+              onClick={handleClick}
+              disabled={isLoading} // Disable button while loading
+            >
+              {isLoading
+                ? "در حال یافتن دستور پخت..."
+                : "ببین چه غذایی میتونی بپزی!"}
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

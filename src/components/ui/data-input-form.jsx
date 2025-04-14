@@ -18,7 +18,7 @@ export default function DataInputForm() {
   };
 
   return (
-    <section className="flex flex-row w-full gap-2 mt-24 my-10 px-5">
+    <section className="flex flex-row w-full gap-2 bg-white z-50">
       <Input ref={ingredient} className="w-full" />
       <Button onClick={onsubmit} className="h-12 w-12 active:bg-slate-700">
         <svg

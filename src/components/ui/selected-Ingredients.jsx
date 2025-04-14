@@ -11,7 +11,7 @@ export default function SelectedIngredients() {
   };
 
   return (
-    <section className="w-full px-5">
+    <section className="w-full">
       <div className="flex flex-row items-baseline gap-2">
         <h1 className="font-[550] text-xl mr-3 text-right mb-4">
           مواد اولیه شما
@@ -20,7 +20,7 @@ export default function SelectedIngredients() {
           برای پاک کردن ضربه بزنید
         </h2>
       </div>
-      <div className="bg-white border-[1px] border-[#CBD5E1] p-3 rounded-xl flex flex-wrap gap-2 text-right">
+      <div className="bg-white border-[1px] border-[#CBD5E1] p-3 rounded-lg flex flex-wrap gap-2 text-right">
         {ingredients.length === 0 ? (
           <div className="h-[38px] flex flex-row items-center">
             <span className="text-slate-400 font-normal text-lg">
