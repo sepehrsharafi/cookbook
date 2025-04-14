@@ -41,6 +41,7 @@ export async function POST(request) {
 8. Follow this exact structure for each recipe JSON object:
 9. VERY IMPORTANT: THE INSTRUCTIONS NEED TO BE CLEAR AND DETAILED AND STEP BY STEP. MAKE SURE TO FOLLOW THIS RULE.
 10. MAKE THE INGREDIENTS LIST MORE DETAILED. FOR EXAMPLE IF YOU WANT TO COOK EGGS DONT JUST SAY EGGS IN THE INGRIDIENTS LIST BECAUSE TO COOK EGGS YOU ALSO NEED OIL. SO SAYY ALL OF THE THINGS NEEDED TO COOK THAT FOOD.
+VERY IMPORTANT REMEMBER TO DO THIS: MAKE THE THE INSTRUCTIONS VERY DETAILED. IMAGINE THAT YOU ARE TALKING TO A AMATURE THAT NEEDS TP BE TOLD EXACTLY WHAT TO DO. 
 
 {
   "title": "Recipe name",
@@ -55,9 +56,18 @@ export async function POST(request) {
     "Instruction 1 on a single line",
     "Instruction 2 on a single line"
   ],
+  "notes": [
+  "note on how to make this food better in a single line",
+  "note on how to make this food better in a single line"
+  ],
+  "serve": [
+  "How to serve this food properly in a single line",
+  "How to serve this food properly in a single line"
+  ]
   "enjoyMessage": "Enjoy message on one line   And a relevant emoji in the end (THE EMOJIE NEEDS TO BE COLORFULL, YOU CAN ADD UP TO THREE EMOJIES)"
 }
 
+IMPORTANT TO REMEMBER: GIVE THE USER AS MANY RESONABLE RECIPE SUGGESTIONS AS YOU CAN preferably more than three. 
 REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatting for human readability with newlines will break the parser.`;
 
     const response = await fetch("https://llm.chutes.ai/v1/chat/completions", {

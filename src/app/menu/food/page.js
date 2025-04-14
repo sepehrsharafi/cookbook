@@ -51,6 +51,7 @@ function Content({ recipe }) {
   // Otherwise, transform it here if needed. Assuming it matches for now.
   const ingredientsForTable = recipe.ingredients || [];
   const instructionsList = recipe.instructions || [];
+  const notes = recipe.notes || [];
 
   return (
     <>
@@ -125,7 +126,7 @@ function Content({ recipe }) {
           </div>
         )}
         <p className="text-[18px] font-normal">
-          {recipe.description || "توضیحات غذا در اینجا قرار می‌گیرد."}{" "}
+          {recipe.longDescription || "توضیحات غذا در اینجا قرار می‌گیرد."}{" "}
           {/* Dynamic description */}
         </p>
       </section>
@@ -133,6 +134,9 @@ function Content({ recipe }) {
       <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
 
       {/* Pass dynamic ingredients to the Table */}
+      <h1 className="text-[19px] font-medium mx-5 mb-4">
+        مواد لازم برای {recipe.title}
+      </h1>
       <Table source={ingredientsForTable} />
 
       <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
@@ -155,7 +159,24 @@ function Content({ recipe }) {
         </section>
       )}
 
-      {/* Removed redundant sections like second "طرز تهیه" and "نوش جان" unless they are part of dynamic data */}
+      <hr className="bg-[#E2E8F0] h-[2px] my-4 mx-8 rounded-full" />
+
+      {notes.length > 0 && (
+        <section>
+          <h1 className="text-[19px] font-medium mx-5 mb-2">نکات:</h1>
+          <div className="mx-5">
+            <ol
+              style={{ listStyle: "arabic-indic", listStylePosition: "inside" }}
+              className="text-lg font-normal list-decimal space-y-2" // Added space-y-2 for better readability
+              lang="fa"
+            >
+              {notes.map((step, index) => (
+                <li key={index}>{step}</li> // Render each instruction step
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
 
       {/* Optional: Add a "نوش جان" section if desired */}
       <section className="mx-5 my-7">
