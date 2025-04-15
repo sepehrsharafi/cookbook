@@ -4,11 +4,16 @@ import axios from "axios"; // Ensure axios is imported
 
 export async function fetchData(ingredients) {
   // Removed setRecipes parameter
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  // Determine base URL: Use VERCEL_URL if available (on Vercel), otherwise fallback to localhost
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}` // Prepend https for Vercel URL
+    : "http://localhost:3000"; // Fallback for local development
   const apiUrl = `${baseUrl}/api/chat`;
 
+  console.log(`Fetching data from: ${apiUrl}`); // Add logging to see the URL being used
+
   try {
-    const res = await axios.post("/api/chat"); // Use absolute URL
+    const res = await axios.post(apiUrl, { ingredients }); // Use absolute URL
     const data = res.data; // API now returns the array of recipes directly
 
     // Add unique IDs and return the fetched recipes array
