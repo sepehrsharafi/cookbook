@@ -1,20 +1,55 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react"; // Import useEffect, useState
 import Header from "@/components/ui/header";
 import Suggestion from "@/components/ui/suggestion";
 import { useIngredientContext } from "@/store/ingredient-context";
-import Loading from "./loading"; // Keep Loading component
+import Loading from "./loading";
+import { fetchData } from "../../app/actions"; // Import fetchData action
 
 export default function Page() {
-  // Only get recipes from context. setRecipes is called by the main page.
-  const { recipes } = useIngredientContext();
+  const { ingredients, recipes, setRecipes } = useIngredientContext(); // Get ingredients and setRecipes
+  const [isLoading, setIsLoading] = useState(false); // Local loading state
+  const [error, setError] = useState(null); // Local error state
+
+  // Fetch data on mount if recipes aren't already loaded in context
+  useEffect(() => {
+    // Check if recipes are null/undefined AND ingredients are available
+    if (
+      (recipes === null || recipes === undefined) &&
+      ingredients &&
+      ingredients.length > 0
+    ) {
+      const loadRecipes = async () => {
+        setIsLoading(true);
+        setError(null);
+        const result = await fetchData(ingredients);
+        if (result.success) {
+          setRecipes(result.data);
+        } else {
+          setError(result.error || "Failed to fetch recipes.");
+          setRecipes([]); // Set to empty array on error to stop potential infinite loading
+        }
+        setIsLoading(false);
+      };
+      loadRecipes();
+    } else if (recipes === null && (!ingredients || ingredients.length === 0)) {
+      // Handle case where user lands here directly without ingredients
+      setError("No ingredients selected to find recipes.");
+      setRecipes([]); // Ensure recipes isn't null
+    }
+    // Dependency array: Run when ingredients or recipes context value changes,
+    // but the logic inside prevents re-fetching if recipes are already loaded.
+  }, [ingredients, recipes, setRecipes]);
 
   // Hardcoded image URLs remain the same
   const imageUrls = ["/ghorme-sabzi.jpg", "/خورشت-قیمه.jpg"];
 
   let content;
-  if (recipes === null || recipes === undefined) {
+  // Prioritize loading and error states
+  if (isLoading) {
     content = <Loading />;
+  } else if (error) {
+    content = <p className="text-center text-red-500 mt-10">{error}</p>;
   } else if (Array.isArray(recipes) && recipes.length > 0) {
     // recipes is a non-empty array, display suggestions
     content = recipes.map((suggestion, idx) => {

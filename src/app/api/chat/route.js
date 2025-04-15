@@ -67,7 +67,7 @@ VERY IMPORTANT REMEMBER TO DO THIS: MAKE THE THE INSTRUCTIONS VERY DETAILED. IMA
   "enjoyMessage": "Enjoy message on one line   And a relevant emoji in the end (THE EMOJIE NEEDS TO BE COLORFULL, YOU CAN ADD UP TO THREE EMOJIES)"
 }
 
-IMPORTANT TO REMEMBER: GIVE THE USER AS MANY RESONABLE RECIPE SUGGESTIONS AS YOU CAN preferably more than three. 
+IMPORTANT TO REMEMBER: GIVE THE USER AS MANY RESONABLE RECIPE SUGGESTIONS AS YOU CAN BUT ALWAYS MORE THAN TWO. 
 REMEMBER: This JSON will be parsed programmatically, not read by humans. Formatting for human readability with newlines will break the parser.`;
 
     const response = await fetch("https://llm.chutes.ai/v1/chat/completions", {
