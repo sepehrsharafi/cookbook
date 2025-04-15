@@ -8,7 +8,7 @@ export async function fetchData(ingredients) {
   const apiUrl = `${baseUrl}/api/chat`;
 
   try {
-    const res = await axios.post(apiUrl, { ingredients }); // Use absolute URL
+    const res = await axios.post("/api/chat"); // Use absolute URL
     const data = res.data; // API now returns the array of recipes directly
 
     // Add unique IDs and return the fetched recipes array
