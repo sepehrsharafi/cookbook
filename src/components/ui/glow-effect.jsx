@@ -1,55 +1,59 @@
-'use client';;
-import { cn } from '@/lib/utils';
-import { motion } from 'motion/react';
+"use client";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 
 export function GlowEffect({
   className,
   style,
-  colors = ['#FF5733', '#33FF57', '#3357FF', '#F1C40F'],
-  mode = 'rotate',
-  blur = 'medium',
+  colors = ["#FF5733", "#33FF57", "#3357FF", "#F1C40F"],
+  mode = "rotate",
+  blur = "medium",
   transition,
   scale = 1,
-  duration = 5
+  duration = 5,
 }) {
   const BASE_TRANSITION = {
     repeat: Infinity,
     duration: duration,
-    ease: 'linear',
+    ease: "linear",
   };
 
   const animations = {
     rotate: {
       background: [
-        `conic-gradient(from 0deg at 50% 50%, ${colors.join(', ')})`,
-        `conic-gradient(from 360deg at 50% 50%, ${colors.join(', ')})`,
+        `conic-gradient(from 0deg at 50% 50%, ${colors.join(", ")})`,
+        `conic-gradient(from 360deg at 50% 50%, ${colors.join(", ")})`,
       ],
       transition: {
         ...(transition ?? BASE_TRANSITION),
       },
     },
     pulse: {
-      background: colors.map((color) =>
-        `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 100%)`),
+      background: colors.map(
+        (color) =>
+          `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 100%)`
+      ),
       scale: [1 * scale, 1.1 * scale, 1 * scale],
       opacity: [0.5, 0.8, 0.5],
       transition: {
         ...(transition ?? {
           ...BASE_TRANSITION,
-          repeatType: 'mirror',
+          repeatType: "mirror",
         }),
       },
     },
     breathe: {
       background: [
-        ...colors.map((color) =>
-          `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 100%)`),
+        ...colors.map(
+          (color) =>
+            `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 75%)`
+        ),
       ],
       scale: [1 * scale, 1.05 * scale, 1 * scale],
       transition: {
         ...(transition ?? {
           ...BASE_TRANSITION,
-          repeatType: 'mirror',
+          repeatType: "mirror",
         }),
       },
     },
@@ -61,7 +65,7 @@ export function GlowEffect({
       transition: {
         ...(transition ?? {
           ...BASE_TRANSITION,
-          repeatType: 'mirror',
+          repeatType: "mirror",
         }),
       },
     },
@@ -73,28 +77,28 @@ export function GlowEffect({
       transition: {
         ...(transition ?? {
           ...BASE_TRANSITION,
-          repeatType: 'mirror',
+          repeatType: "mirror",
         }),
       },
     },
     static: {
-      background: `linear-gradient(to right, ${colors.join(', ')})`,
+      background: `linear-gradient(to right, ${colors.join(", ")})`,
     },
   };
 
   const getBlurClass = (blur) => {
-    if (typeof blur === 'number') {
+    if (typeof blur === "number") {
       return `blur-[${blur}px]`;
     }
 
     const presets = {
-      softest: 'blur-sm',
-      soft: 'blur',
-      medium: 'blur-md',
-      strong: 'blur-lg',
-      stronger: 'blur-xl',
-      strongest: 'blur-xl',
-      none: 'blur-none',
+      softest: "blur-sm",
+      soft: "blur",
+      medium: "blur-md",
+      strong: "blur-lg",
+      stronger: "blur-xl",
+      strongest: "blur-xl",
+      none: "blur-none",
     };
 
     return presets[blur];
@@ -102,20 +106,19 @@ export function GlowEffect({
 
   return (
     <motion.div
-      style={
-        {
-          ...style,
-          '--scale': scale,
-          willChange: 'transform',
-          backfaceVisibility: 'hidden'
-        }
-      }
+      style={{
+        ...style,
+        "--scale": scale,
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+      }}
       animate={animations[mode]}
       className={cn(
-        'pointer-events-none absolute inset-0 h-full w-full',
-        'scale-[var(--scale)] transform-gpu',
+        "pointer-events-none absolute inset-0 h-full w-full",
+        "scale-[var(--scale)] transform-gpu",
         getBlurClass(blur),
         className
-      )} />
+      )}
+    />
   );
 }

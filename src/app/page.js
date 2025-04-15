@@ -44,7 +44,7 @@ export default function Home() {
               mode="breathe"
               blur="soft"
               duration={5}
-              scale={1.1}
+              scale={1.2}
             />
             <button
               className="w-full px-5 h-[56px] text-[19px] font-[450] rounded-[10px] relative inline-flex items-center justify-center gap-1  bg-slate-900 py-1.5 text-sm text-zinc-50  outline-1 outline-[#fff2f21f]"
