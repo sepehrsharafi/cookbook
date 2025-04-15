@@ -1,5 +1,3 @@
-"use server";
-
 import axios from "axios"; // Ensure axios is imported
 
 export async function fetchData(ingredients) {
