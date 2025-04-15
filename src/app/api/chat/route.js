@@ -20,8 +20,26 @@ export async function POST(request) {
 
     const apiKey = process.env.CHUTES_API_TOKEN;
 
+    // Add detailed logging for the API key in the Vercel environment
+    if (!apiKey) {
+      console.error("Vercel Env Check: CHUTES_API_TOKEN is MISSING or empty.");
+    } else if (apiKey === "YOUR_API_KEY_HERE") {
+      console.error(
+        "Vercel Env Check: CHUTES_API_TOKEN is still the placeholder value."
+      );
+    } else {
+      // Log the first 5 and last 5 characters to verify it's being read
+      const keyStart = apiKey.substring(0, 5);
+      const keyEnd = apiKey.substring(apiKey.length - 5);
+      console.log(
+        `Vercel Env Check: Using CHUTES_API_TOKEN starting with "${keyStart}" and ending with "${keyEnd}".`
+      );
+    }
+
     if (!apiKey || apiKey === "YOUR_API_KEY_HERE") {
-      console.error("Chutes AI API key is missing or not set in .env file");
+      console.error(
+        "Chutes AI API key is missing or not set correctly in Vercel Environment Variables."
+      ); // Updated error message
       return NextResponse.json(
         { error: "API key not configured" },
         { status: 500 }
