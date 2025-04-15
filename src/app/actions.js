@@ -11,7 +11,10 @@ export async function fetchData(ingredients) {
   console.log(`Fetching data from: ${apiUrl}`); // Add logging to see the URL being used
 
   try {
-    const res = await axios.post("/api/chat", { ingredients }); // Use absolute URL
+    const res = await axios.post(
+      "https://cookbook-sepehrsharafis-projects.vercel.app/api/chat",
+      { ingredients }
+    ); // Use absolute URL
     const data = res.data; // API now returns the array of recipes directly
 
     // Add unique IDs and return the fetched recipes array
