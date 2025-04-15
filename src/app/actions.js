@@ -8,7 +8,7 @@ export async function fetchData(ingredients) {
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}` // Prepend https for Vercel URL
     : "http://localhost:3000"; // Fallback for local development
-  const apiUrl = `${baseUrl}api/chat`;
+  const apiUrl = `${baseUrl}/api/chat`;
 
   console.log(`Fetching data from: ${apiUrl}`); // Add logging to see the URL being used
 
